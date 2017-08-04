@@ -1,45 +1,45 @@
 require 'date'
-# 
+#
 # {<img src="https://travis-ci.org/Flambino/week_sauce.png?branch=master" alt="Build Status" />}[https://travis-ci.org/Flambino/week_sauce]
 # {<img src="https://badge.fury.io/rb/week_sauce.png" alt="Gem Version" />}[http://badge.fury.io/rb/week_sauce]
 # {<img src="https://codeclimate.com/github/Flambino/week_sauce.png" />}[https://codeclimate.com/github/Flambino/week_sauce]
-# 
+#
 # WeekSauce is a simple class that functions as a days-of-the-week bitmask. Useful for things that repeat weekly, and/or can occur on one or more days of the week.
-# 
+#
 # It was extracted from a Rails app, and is primarily intended to used as an ActiveRecord attribute serializer, but it should work fine outside of Rails too.
-# 
+#
 # == The Basics
-# 
+#
 #   week = WeekSauce.new(16) # init with bitmask (optional)
 #   week.blank?     #=> false
 #   week.one?       #=> true
 #   week.thursday?  #=> true
-#   
+#
 #   week = WeekSauce.new     # defaults to a zero-bitmask
 #   week.blank? #=> true
-#   
+#
 #   # Mark the weekend
 #   week.set(:saturday, :sunday)
-#   
+#
 #   from = Time.parse("2013-04-01") # A Monday
 #   week.next_date(from)            #=> Sat, 06 Apr 2013
-#   
+#
 #   week.dates_in(from..from + 1.week) => [Sat, 06 Apr 2013 , Sun, 07 Apr 2013]
-# 
+#
 # == Usage with ActiveRecord
-# 
+#
 #   class Workout < ActiveRecord::Base
 #     serialize :days, WeekSauce
 #   end
-#   
+#
 #   workout = Workout.find_by_kind("Weights")
 #   workout.days.inspect #=> "20: Tuesday, Thursday"
-#   
+#
 #   workout.days.set!(:tuesday, :thursday) # sets only those days
 #   workout.save
-# 
+#
 # The underlying `days` database column can be either a string or integer type.
-# 
+#
 class WeekSauce
   MAX_VALUE = 2**7 - 1
   DAY_NAMES = %w(sunday monday tuesday wednesday thursday friday saturday).map(&:to_sym).freeze
@@ -47,7 +47,7 @@ class WeekSauce
   
   class << self
     # ActiveRecord attribute serialization support
-    # 
+    #
     # Create a WeekSauce instance from a stringified integer
     # bitmask. The value will be clamped (see #new)
     def load(string)
@@ -57,7 +57,7 @@ class WeekSauce
     end
     
     # ActiveRecord attribute serialization support
-    # 
+    #
     # Dump a WeekSauce instance to a stringified bitmask value
     def dump(instance)
       if instance.is_a?(self)
@@ -70,7 +70,7 @@ class WeekSauce
   
   # Init a new WeekSauce instance. If +value+ is omitted, the new
   # instance will default to a bitmask of zero, i.e. no days set.
-  # 
+  #
   # If a +value+ argument is given, +to_i+ will be called on it,
   # and the resulting integer will be clamped to 0..127
   def initialize(value = nil)
@@ -128,7 +128,7 @@ class WeekSauce
   
   # Returns +true+ if the given day is set, +false+ if it isn't,
   # and +nil+ if the argument was invalid.
-  # 
+  #
   # The +wday+ argument can be
   # - a Fixnum from 0 (Sunday) to 6 (Saturday),
   # - a day-name symbol, e.g. +:tuesday+, +:friday+,
@@ -225,14 +225,14 @@ class WeekSauce
   
   # Return the next date matching the bitmask, or +nil+ if the
   # week is blank.
-  # 
+  #
   # If no +from_date+ argument is given, it'll default to
   # <tt>Date.current</tt> if ActiveSupport is available,
   # otherwise it'll use <tt>Date.today</tt>.
-  # 
+  #
   # If +from_date+ argument can be a +Date+ or a +Time+ object
   # (the latter will be converted using +#to_date+)
-  # 
+  #
   # If +from_date+ is given, #next_date will return the first
   # matching date from - and including - +from_date+
   def next_date(from_date = nil)
@@ -252,7 +252,7 @@ class WeekSauce
   # Return all dates in the given +date_range+ that match the
   # bitmask. If the week's blank, an empty array will be
   # returned.
-  # 
+  #
   # Note that the range is converted to an array, which
   # is then filtered, so if the range is "backwards" (high to
   # low) an empty array will be returned
@@ -283,7 +283,7 @@ class WeekSauce
       case wday
       when Symbol
         DAY_BITS[wday]
-      when Fixnum, /\A[0-6]\Z/
+      when Integer, /\A[0-6]\Z/
         wday = wday.to_i
         (0..6).include?(wday) ? 2**wday : nil
       when Date, Time
