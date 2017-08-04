@@ -77,10 +77,10 @@ class WeekSauce
     @value = [[0, value.to_i].max, MAX_VALUE].min
   end
   
-  # Compare this instance against another instance or a Fixnum
+  # Compare this instance against another instance or a Integer
   def ==(arg)
     case arg
-    when self.class, Fixnum
+    when self.class, Integer
       to_i == arg.to_i
     else
       false
@@ -130,7 +130,7 @@ class WeekSauce
   # and +nil+ if the argument was invalid.
   #
   # The +wday+ argument can be
-  # - a Fixnum from 0 (Sunday) to 6 (Saturday),
+  # - a Integer from 0 (Sunday) to 6 (Saturday),
   # - a day-name symbol, e.g. +:tuesday+, +:friday+,
   # - a day-name string (case-insensitive), e.g. <tt>"Monday"</tt>, <tt>"sunday"</tt>
   # - a Time object, or
@@ -145,7 +145,7 @@ class WeekSauce
     set_bit coerce_to_bit(wday), bool
   end
   
-  # Set the given days. Like #[], arguments can be symbols, Fixnums,
+  # Set the given days. Like #[], arguments can be symbols, Integers,
   # or Date/Time objects
   def set(*days)
     days.each do |day|
@@ -162,7 +162,7 @@ class WeekSauce
   end
   
   # Unset the given days. Like #[], arguments can be symbols,
-  # Fixnums, or Date/Time objects
+  # Integers, or Date/Time objects
   def unset(*days)
     days.each do |day|
       self[day] = false
