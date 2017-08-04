@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'active_support/time'
+require 'active_support/all'
 
 describe WeekSauce do
   
@@ -428,7 +428,7 @@ describe WeekSauce do
       
       it "finds next date from a given day" do
         date = Time.parse "2013-04-01" # April fool's (also a happens to be a Monday)
-        expect(week.next_date(date)).to eq date.to_date + 2.days
+        expect(week.next_date(date)).to eq date.to_date + 2
       end
       
       it "returns a duplicate of the from argument if it matches" do

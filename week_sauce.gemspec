@@ -11,9 +11,9 @@ Gem::Specification.new do |s|
   
   s.required_ruby_version = '>= 1.9.2'
   
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'tzinfo', '~> 0.3.29'
-  s.add_development_dependency 'activesupport', '>= 3.2.0'
+  s.add_development_dependency 'rspec', '~> 3.6.0'
+  s.add_development_dependency 'tzinfo', '~> 1.2.0'
+  s.add_development_dependency 'activesupport', '>= 4.2'
   
   s.files = ["lib/week_sauce.rb", "README.md", "MIT-LICENSE"]
 end
